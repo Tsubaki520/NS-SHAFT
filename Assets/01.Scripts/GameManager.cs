@@ -4,8 +4,9 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager Instance = null;
+    public BlockCreater blockCreater;
 
+    public static GameManager Instance = null;
     public static bool PoolReady, UIReady;
     /// <summary>
     /// 所有關卡系統準備完成
@@ -15,14 +16,12 @@ public class GameManager : MonoBehaviour
         get { return PoolReady && UIReady; }
     }
 
-    readonly float m_leftBorder = -7.75f;
-    readonly float m_rightBorder = 5.5f;
-
     private void Awake ()
     {
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad (gameObject);
         }
         else if (Instance != this)
         {
@@ -35,7 +34,7 @@ public class GameManager : MonoBehaviour
 
     private void Init ()
     {
-
+        blockCreater.canSpawn = false;
     }
 
     private void OnDestroy ()

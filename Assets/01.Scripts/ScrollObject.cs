@@ -2,15 +2,16 @@
 
 public class ScrollObject : MonoBehaviour
 {
+    [SerializeField]
+    private bool canLoop = false;
     private RectTransform rect;
 
     [Header ("ScrollSetting")]
     [SerializeField]
-    private float scrollSpeed = 0.4f;
-    [SerializeField]
     private float imageHeight;
     [SerializeField]
     private float initPositionY;
+    private float scrollSpeed = 40;
 
     void Start ()
     {
@@ -26,8 +27,9 @@ public class ScrollObject : MonoBehaviour
 
     void Scroll ()
     {
-        GetComponent<RectTransform> ().anchoredPosition += new Vector2 (0, 100 * Time.deltaTime * scrollSpeed);
-        if (rect.anchoredPosition.y >= imageHeight)
+        GetComponent<RectTransform> ().anchoredPosition += new Vector2 (0, Time.deltaTime * scrollSpeed);
+
+        if (canLoop && rect.anchoredPosition.y >= imageHeight)
         {
             rect.anchoredPosition += new Vector2 (0, initPositionY);
         }
