@@ -22,6 +22,8 @@ public class ScrollObject : MonoBehaviour
 
     void Update ()
     {
+        if (!GameManager.SceneReady) return;
+
         Scroll ();
     }
 

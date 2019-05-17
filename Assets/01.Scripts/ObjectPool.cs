@@ -21,7 +21,10 @@ public class ObjectPool : MonoBehaviour
             Instance = this;
         else if (Instance != this)
             Destroy (gameObject);
+    }
 
+    private void Start ()
+    {
         CreatePoolObject ();
         GameManager.PoolReady = true;
     }

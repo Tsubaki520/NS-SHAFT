@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class UIManager : MonoBehaviour
 {
-    [Header ("ViewSetting")]
-    public GameObject[ ] floors;
-    public GameObject[ ] Scroll_Images;
-    public GameObject Menu;
+    [Header ("Menu")]
+    public GameObject Menu = null;
+    [SerializeField]
+    private Button m_startButton = null;
+    [SerializeField]
+    private Button m_exitButton = null;
 
     void Start ()
     {
@@ -18,13 +21,34 @@ public class UIManager : MonoBehaviour
 
     void Init ()
     {
-        //重製座標軸
-        Scroll_Images[0].transform.position += Vector3.zero;
-        Scroll_Images[1].transform.position += Vector3.zero;
+        Menu.SetActive (true);
     }
 
     void Update ()
     {
+        if (!GameManager.SceneReady) return;
 
+        ButtonListener ();
+    }
+
+    void ButtonListener ()
+    {
+        m_startButton.onClick.AddListener (LoadScene);
+        m_exitButton.onClick.AddListener (ExitGame);
+    }
+
+    void LoadScene ()
+    {
+        System.GC.Collect ();
+        Menu.SetActive (false);
+        GameManager.Instance.GameStatus = Status.Play;
+        if (Player.isDead)
+            SceneManager.LoadScene (SceneManager.GetActiveScene ().name);
+    }
+
+    void ExitGame ()
+    {
+        System.GC.Collect ();
+        Application.Quit ();
     }
 }
