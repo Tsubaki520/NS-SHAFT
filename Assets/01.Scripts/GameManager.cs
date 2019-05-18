@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     public BlockCreater blockCreater;
     public Player player;
     public UIManager UI;
+    private GameObject m_playerClone = null;
 
     public static GameManager Instance = null;
     public static bool PlayerReady, PoolReady, UIReady;
@@ -39,9 +40,8 @@ public class GameManager : MonoBehaviour
     private void Init ()
     {
         GameStatus = Status.Over;
-        blockCreater = GameObject.FindGameObjectWithTag ("Respawn").GetComponent<BlockCreater> ();
-        player = GameObject.FindGameObjectWithTag ("Player").GetComponent<Player> ();
-        UI = GameObject.FindGameObjectWithTag ("UIManager").GetComponent<UIManager> ();
+        m_playerClone = Instantiate (player.gameObject);
+        m_playerClone.SetActive (false);
     }
 
     private void Update ()
@@ -52,6 +52,8 @@ public class GameManager : MonoBehaviour
             player.GoDie ();
             UI.Menu.SetActive (true);
         }
+        if (GameStatus == Status.Play)
+            m_playerClone.SetActive (true);
     }
 
     private void OnDestroy ()

@@ -6,18 +6,18 @@ public class BlockCreater : MonoBehaviour
 {
     [Header ("Object Spawn Settings")]
     [SerializeField]
-    private Transform m_ObjectTransform;
+    private List<GameObject> m_blockList = new List<GameObject> ();
     [SerializeField]
-    private GameObject[ ] m_blockList;
-    private List<GameObject> m_UsedBlockList = new List<GameObject> (BlockNum);
-    private List<GameObject> m_unUsedBlockList = new List<GameObject> (BlockNum);
+    private GameObject[ ] m_blocks = null;
+    private Transform m_ObjectTransform = null;
+    [Range (0.1f, 2f)]
     [SerializeField]
-    private float m_initHeight = 0;
-    const int BlockNum = 120;
+    private float m_initY = 0;
+    const int BlockNum_Normal = 5;
 
     //BorderLimit
-    readonly float m_borderLeft = -7.75f;
-    readonly float m_borderRight = 5.5f;
+    readonly float m_borderLeft = -6.8f;
+    readonly float m_borderRight = 4.5f;
 
     void Start ()
     {
@@ -26,17 +26,10 @@ public class BlockCreater : MonoBehaviour
 
     void SetObjectPool ()
     {
-        for (int i = 0 ; i < transform.childCount ; i++)
-        {
-            m_blockList[i] = transform.GetChild (i).gameObject;
-            GameObject block = Instantiate (m_blockList[i], m_blockList[i].transform);
-
-            for (int x = 0 ; x < BlockNum ; x++)
-            {
-                m_unUsedBlockList.Add (block);
-                block.SetActive (false);
-            }
-        }
+        for (int x = 0 ; x < BlockNum_Normal ; x++)
+            m_blockList.Add (m_blocks[(int) BlockType.Normal]);
+        for (int y = 1 ; y < m_blocks.Length ; y++)
+            m_blockList.Add (m_blocks[y]);
     }
 
     float NewBlockPositionX ()
@@ -46,7 +39,7 @@ public class BlockCreater : MonoBehaviour
 
     float NewBlockPositionY ()
     {
-        return m_ObjectTransform.position.y - m_initHeight;
+        return m_ObjectTransform.position.y - m_initY;
     }
 
     void Update ()
@@ -59,15 +52,7 @@ public class BlockCreater : MonoBehaviour
 
     IEnumerator CreateBlock ()
     {
-        int Type = Random.Range (0, m_blockList.Length);
-        int Index = m_unUsedBlockList.Count - 1;
-        if (Index > 0)
-        {
-            var block = m_unUsedBlockList[Index];
-            m_unUsedBlockList.RemoveAt (Index);
-            m_UsedBlockList.Add (block);
-            block.SetActive (true);
-        }
+        int Type = Random.Range (0, m_blockList.Count);
         /*
         string m_blockType = m_blockList[Type].name;
         m_ObjectTransform = m_blockList[Type].transform;

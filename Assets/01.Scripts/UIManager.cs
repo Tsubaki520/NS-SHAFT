@@ -39,7 +39,6 @@ public class UIManager : MonoBehaviour
 
     void LoadScene ()
     {
-        System.GC.Collect ();
         Menu.SetActive (false);
         GameManager.Instance.GameStatus = Status.Play;
         if (Player.isDead)

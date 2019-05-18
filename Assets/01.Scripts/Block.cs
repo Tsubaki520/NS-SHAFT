@@ -87,8 +87,5 @@ public class Block : MonoBehaviour
                     }
             }
         }
-
-        if (other.gameObject.CompareTag ("Ceiling"))
-            Destroy (gameObject);
     }
 }
