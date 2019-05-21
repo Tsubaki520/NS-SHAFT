@@ -6,6 +6,7 @@ public class Block : MonoBehaviour
 {
     [SerializeField]
     private float m_moveSpeed = 0;
+    private float m_topBorder = 3.6f;
 
     public BlockType blockType;
 
@@ -16,6 +17,11 @@ public class Block : MonoBehaviour
         if (GameManager.Instance.GameStatus == Status.Play)
         {
             transform.Translate (Vector3.up * m_moveSpeed * Time.deltaTime);
+            if (transform.position.y >= m_topBorder)
+            {
+                GameManager.Instance.BlockCreater.ReturnList (gameObject);
+                GameManager.Instance.UIcounter.AddStage (1);
+            }
         }
     }
 
@@ -35,17 +41,17 @@ public class Block : MonoBehaviour
 
     void AddSpeed ()
     {
-        GameManager.Instance.player.transform.AddPositionX (m_moveSpeed);
+        GameManager.Instance.Player.transform.AddPositionX (m_moveSpeed);
     }
 
     void MinusSpeed ()
     {
-        GameManager.Instance.player.transform.AddPositionX (-m_moveSpeed);
+        GameManager.Instance.Player.transform.AddPositionX (-m_moveSpeed);
     }
 
     void AddHeight ()
     {
-        GameManager.Instance.player.transform.AddPositionY (m_moveSpeed);
+        GameManager.Instance.Player.transform.AddPositionY (m_moveSpeed);
     }
 
     private void OnCollisionEnter2D (Collision2D other)

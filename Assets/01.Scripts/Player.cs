@@ -13,14 +13,13 @@ public class Player : MonoBehaviour
     public static int HP;
 
     private float m_directionX;
-    private bool m_isLeft = false;
-    private bool m_isStop = false;
 
     private void Awake ()
     {
         isDead = false;
         HP = 10;
         m_speedX = 300;
+        transform.position = new Vector3 (-1, 0, 1);
         m_rb = GetComponent<Rigidbody2D> ();
         m_col = GetComponent<CircleCollider2D> ();
         m_animator = GetComponent<Animator> ();
@@ -49,16 +48,21 @@ public class Player : MonoBehaviour
     {
         if (m_directionX < 0)
         {
-            m_isLeft = true;
-            m_isStop = false;
+            PlayAni ((int) AnimationType.Left);
         }
         else if (m_directionX > 0)
         {
-            m_isLeft = false;
-            m_isStop = false;
+            PlayAni ((int) AnimationType.Right);
         }
         else
-            m_isStop = true;
+        {
+            PlayAni ((int) AnimationType.Idle);
+        }
+    }
+
+    public void GetHurt ()
+    {
+        m_animator.SetTrigger ("Hurt");
     }
 
     public void GoDie ()
@@ -75,17 +79,38 @@ public class Player : MonoBehaviour
     {
         switch (index)
         {
+            case 1:
+                {
+                    m_animator.SetBool ("Input", true);
+                    m_animator.SetFloat ("Arrow", m_directionX);
+                    break;
+                }
+            case 2:
+                {
+                    m_animator.SetBool ("Input", true);
+                    m_animator.SetFloat ("Arrow", m_directionX);
+                    break;
+                }
             default:
                 {
+                    m_animator.SetBool ("Input", false);
                     break;
                 }
         }
     }
 
-    private void OnCollisionEnter (Collision other)
+    private void OnCollisionEnter2D (Collision2D other)
     {
         if (other.gameObject.CompareTag ("Ceiling"))
             StartCoroutine (SetTrigger (true));
+        if (other.gameObject.CompareTag ("Block"))
+            m_animator.SetBool ("Fall", false);
+    }
+
+    private void OnCollisionExit2D (Collision2D other)
+    {
+        if (other.gameObject.CompareTag ("Block"))
+            m_animator.SetBool ("Fall", true);
     }
 
     IEnumerator SetTrigger (bool isTrigger)

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum Status { Play, Over }
-public enum AnimationType { Idle, Left, Right, Fall }
+public enum AnimationType { Idle, Left, Right }
 public enum AudioClipType { normal, fake, conveyor, spring, nail, die }
 public enum BlockType { Normal, Fake, Conveyor_Left, Conveyor_Right, Trampoline, Nails }
 

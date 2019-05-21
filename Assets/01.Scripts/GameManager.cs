@@ -6,9 +6,11 @@ public class GameManager : MonoBehaviour
 {
     public Status GameStatus;
 
-    public BlockCreater blockCreater;
-    public Player player;
+    public BlockCreater BlockCreater;
+    public Player Player;
     public UIManager UI;
+    public UICounter UIcounter;
+    public AudioManager AudioManager;
     private GameObject m_playerClone = null;
 
     public static GameManager Instance = null;
@@ -40,7 +42,7 @@ public class GameManager : MonoBehaviour
     private void Init ()
     {
         GameStatus = Status.Over;
-        m_playerClone = Instantiate (player.gameObject);
+        m_playerClone = Instantiate (Player.gameObject);
         m_playerClone.SetActive (false);
     }
 
@@ -49,11 +51,14 @@ public class GameManager : MonoBehaviour
         if (Player.isDead)
         {
             GameStatus = Status.Over;
-            player.GoDie ();
+            Player.GoDie ();
             UI.Menu.SetActive (true);
         }
-        if (GameStatus == Status.Play)
-            m_playerClone.SetActive (true);
+    }
+
+    public void PlayerActive (bool active)
+    {
+        m_playerClone.SetActive (active);
     }
 
     private void OnDestroy ()
