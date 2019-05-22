@@ -39,8 +39,11 @@ public class UIManager : MonoBehaviour
 
     void LoadScene ()
     {
-        if (Player.isDead)
+        if (GameManager.Instance.GameStatus == Status.Over && Player.isDead)
+        {
+            System.GC.Collect ();
             SceneManager.LoadScene (SceneManager.GetActiveScene ().name);
+        }
         else
         {
             Menu.SetActive (false);

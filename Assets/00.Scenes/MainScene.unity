@@ -716,6 +716,7 @@ MonoBehaviour:
   UI: {fileID: 1816661360}
   UIcounter: {fileID: 1022649767}
   AudioManager: {fileID: 441593512}
+  PlayerClone: {fileID: 0}
 --- !u!4 &441593511
 Transform:
   m_ObjectHideFlags: 0
@@ -1721,11 +1722,11 @@ MonoBehaviour:
   - {fileID: 21300002, guid: 4242a13eb3daafe4db7dda0cf65e777d, type: 3}
   - {fileID: 21300004, guid: 4242a13eb3daafe4db7dda0cf65e777d, type: 3}
   StageList:
-  - {fileID: 2029269836}
-  - {fileID: 1030369542}
-  - {fileID: 79064740}
-  - {fileID: 1692870548}
   - {fileID: 1849694593}
+  - {fileID: 1692870548}
+  - {fileID: 79064740}
+  - {fileID: 1030369542}
+  - {fileID: 2029269836}
   Numbers:
   - {fileID: 21300010, guid: 4242a13eb3daafe4db7dda0cf65e777d, type: 3}
   - {fileID: 21300012, guid: 4242a13eb3daafe4db7dda0cf65e777d, type: 3}
@@ -2608,7 +2609,7 @@ MonoBehaviour:
   - {fileID: 4516870896930055236, guid: 95b6bc2415f73b346ac089c990d4c8c5, type: 3}
   - {fileID: 8393822847250890312, guid: 2ce6980dc8c998c45b60f8e236d7ca92, type: 3}
   m_initY: 0.8
-  m_initBlock: 1.2
+  m_initBlock: 1.25
 --- !u!1 &1586774009
 GameObject:
   m_ObjectHideFlags: 0

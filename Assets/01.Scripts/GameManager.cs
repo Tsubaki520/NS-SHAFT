@@ -11,16 +11,16 @@ public class GameManager : MonoBehaviour
     public UIManager UI;
     public UICounter UIcounter;
     public AudioManager AudioManager;
-    private GameObject m_playerClone = null;
+    public GameObject PlayerClone = null;
 
     public static GameManager Instance = null;
-    public static bool PlayerReady, PoolReady, UIReady;
+    public static bool PoolReady, UIReady;
     /// <summary>
     /// 所有關卡系統準備完成
     /// </summary>
     public static bool SceneReady
     {
-        get { return PlayerReady && PoolReady && UIReady; }
+        get { return PoolReady && UIReady; }
     }
 
     private void Awake ()
@@ -42,8 +42,8 @@ public class GameManager : MonoBehaviour
     private void Init ()
     {
         GameStatus = Status.Over;
-        m_playerClone = Instantiate (Player.gameObject);
-        m_playerClone.SetActive (false);
+        PlayerClone = Instantiate (Player.gameObject);
+        PlayerClone.SetActive (false);
     }
 
     private void Update ()
@@ -51,14 +51,13 @@ public class GameManager : MonoBehaviour
         if (Player.isDead)
         {
             GameStatus = Status.Over;
-            Player.GoDie ();
             UI.Menu.SetActive (true);
         }
     }
 
     public void PlayerActive (bool active)
     {
-        m_playerClone.SetActive (active);
+        PlayerClone.SetActive (active);
     }
 
     private void OnDestroy ()

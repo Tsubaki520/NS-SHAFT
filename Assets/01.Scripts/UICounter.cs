@@ -6,15 +6,16 @@ using UnityEngine.UI;
 public class UICounter : MonoBehaviour
 {
     [SerializeField]
-    private Image[ ] LifeList;
+    private Image[ ] LifeList = null;
+    /// <summary> 0 = 滿血, 1 = 扣血 </summary>
     [SerializeField]
-    private Sprite[ ] LifeSprites;
+    private Sprite[ ] LifeSprites = null;
     [SerializeField]
-    private Image[ ] StageList;
+    private Image[ ] StageList = null;
     [SerializeField]
-    private Sprite[ ] Numbers;
+    private Sprite[ ] Numbers = null;
 
-    private int m_playerHP = 10;
+    private int m_nowHP = 10;
     private int m_stageNum = 0;
 
     void Start ()
@@ -25,24 +26,21 @@ public class UICounter : MonoBehaviour
             StageList[y].sprite = Numbers[m_stageNum];
     }
 
-    void Update ()
-    {
-        if (!GameManager.SceneReady) return;
-
-        if (GameManager.Instance.GameStatus == Status.Play)
-        {
-
-        }
-    }
-
     public void AddStage (int stage)
     {
         m_stageNum += stage;
+        for (int i = 0 ; i < StageList.Length ; i++)
+            StageList[i].sprite = Numbers[(m_stageNum / (int) Mathf.Pow (10, i)) % 10];
     }
 
-    void SetHP ()
+    /// <summary> 0 = 補血, 1 = 扣血 </summary>
+    public void SetHP (int hpSprite)
     {
-        m_playerHP = Player.HP;
-
+        m_nowHP = Player.HP;
+        if (hpSprite == 0)
+            LifeList[m_nowHP - 1].sprite = LifeSprites[hpSprite];
+        else
+            for (int i = m_nowHP ; i < LifeList.Length ; i++)
+                LifeList[i].sprite = LifeSprites[hpSprite];
     }
 }

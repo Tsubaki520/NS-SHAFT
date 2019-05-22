@@ -8,7 +8,15 @@ public class Block : MonoBehaviour
     private float m_moveSpeed = 0;
     private float m_topBorder = 3.6f;
 
+    private Animator animator;
+    private BoxCollider2D col;
     public BlockType blockType;
+
+    void Start ()
+    {
+        animator = GetComponent<Animator> ();
+        col = GetComponent<BoxCollider2D> ();
+    }
 
     void Update ()
     {
@@ -22,6 +30,8 @@ public class Block : MonoBehaviour
                 GameManager.Instance.BlockCreater.ReturnList (gameObject);
                 GameManager.Instance.UIcounter.AddStage (1);
             }
+            if (GameManager.Instance.GameStatus == Status.Over)
+                gameObject.SetActive (false);
         }
     }
 
@@ -30,6 +40,7 @@ public class Block : MonoBehaviour
         Player.HP++;
         if (Player.HP >= 10)
             Player.HP = 10;
+        GameManager.Instance.UIcounter.SetHP (0);
     }
 
     void MinusHP ()
@@ -37,21 +48,22 @@ public class Block : MonoBehaviour
         Player.HP -= 3;
         if (Player.HP <= 0)
             Player.HP = 0;
+        GameManager.Instance.UIcounter.SetHP (1);
     }
 
     void AddSpeed ()
     {
-        GameManager.Instance.Player.transform.AddPositionX (m_moveSpeed);
+        GameManager.Instance.PlayerClone.transform.position += new Vector3 (m_moveSpeed / 10, 0, 0);
     }
 
     void MinusSpeed ()
     {
-        GameManager.Instance.Player.transform.AddPositionX (-m_moveSpeed);
+        GameManager.Instance.PlayerClone.transform.position += new Vector3 (-m_moveSpeed / 10, 0, 0);
     }
 
     void AddHeight ()
     {
-        GameManager.Instance.Player.transform.AddPositionY (m_moveSpeed);
+        GameManager.Instance.PlayerClone.transform.position += new Vector3 (0, m_moveSpeed / 10, 0);
     }
 
     private void OnCollisionEnter2D (Collision2D other)
@@ -63,8 +75,30 @@ public class Block : MonoBehaviour
                 case (int) BlockType.Fake:
                     {
                         AddHP ();
+                        animator.SetTrigger ("OnTriggerEnter");
+                        col.isTrigger = true;
                         break;
                     }
+                case (int) BlockType.Nails:
+                    {
+                        MinusHP ();
+                        break;
+                    }
+                default:
+                    {
+                        AddHP ();
+                        break;
+                    }
+            }
+        }
+    }
+
+    private void OnCollisionStay2D (Collision2D other)
+    {
+        if (other.gameObject.CompareTag ("Player"))
+        {
+            switch ((int) blockType)
+            {
                 case (int) BlockType.Conveyor_Left:
                     {
                         MinusSpeed ();
@@ -79,16 +113,12 @@ public class Block : MonoBehaviour
                     {
                         AddHP ();
                         AddHeight ();
-                        break;
-                    }
-                case (int) BlockType.Nails:
-                    {
-                        MinusHP ();
+                        animator.SetTrigger ("OnTriggerEnter");
+                        GameManager.Instance.PlayerClone.GetComponent<Player> ().SetTrigger (true);
                         break;
                     }
                 default:
                     {
-                        AddHP ();
                         break;
                     }
             }

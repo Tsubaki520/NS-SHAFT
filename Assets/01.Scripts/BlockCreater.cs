@@ -78,6 +78,10 @@ public class BlockCreater : MonoBehaviour
     IEnumerator CreateBlock (float time)
     {
         int Type = Random.Range (0, m_blockList.Count);
+        if (m_usedBlocks.Count == 0)
+        {
+            Type = 0;
+        }
         GameObject blockClone = m_blockList[Type].gameObject;
         m_ObjectTransform = transform;
 

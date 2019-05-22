@@ -5,7 +5,7 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     public float m_speedX;
-    private Rigidbody2D m_rb;
+    public Rigidbody2D rb;
     private CircleCollider2D m_col;
     private Animator m_animator;
 
@@ -20,10 +20,9 @@ public class Player : MonoBehaviour
         HP = 10;
         m_speedX = 300;
         transform.position = new Vector3 (-1, 0, 1);
-        m_rb = GetComponent<Rigidbody2D> ();
+        rb = GetComponent<Rigidbody2D> ();
         m_col = GetComponent<CircleCollider2D> ();
         m_animator = GetComponent<Animator> ();
-        GameManager.PlayerReady = true;
     }
 
     void Update ()
@@ -33,13 +32,14 @@ public class Player : MonoBehaviour
         if (GameManager.Instance.GameStatus == Status.Play)
         {
             Move ();
+            CheckHP ();
         }
     }
 
     void Move ()
     {
         m_directionX = Input.GetAxisRaw ("Horizontal");
-        m_rb.velocity = Vector2.right * m_directionX * Time.deltaTime * m_speedX;
+        rb.velocity = Vector2.right * m_directionX * Time.deltaTime * m_speedX;
 
         CheckDirection ();
     }
@@ -60,19 +60,18 @@ public class Player : MonoBehaviour
         }
     }
 
+    void CheckHP ()
+    {
+        if (HP == 0)
+        {
+            isDead = true;
+            gameObject.SetActive (false);
+        }
+    }
+
     public void GetHurt ()
     {
         m_animator.SetTrigger ("Hurt");
-    }
-
-    public void GoDie ()
-    {
-        gameObject.SetActive (false);
-    }
-
-    void CheckLife ()
-    {
-
     }
 
     void PlayAni (int index)
@@ -113,10 +112,10 @@ public class Player : MonoBehaviour
             m_animator.SetBool ("Fall", true);
     }
 
-    IEnumerator SetTrigger (bool isTrigger)
+    public IEnumerator SetTrigger (bool isTrigger)
     {
         m_col.isTrigger = isTrigger;
-        yield return new WaitForFixedUpdate ();
+        yield return new WaitForSeconds (0.1f);
         m_col.isTrigger = !isTrigger;
         yield return null;
     }
